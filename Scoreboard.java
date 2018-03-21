@@ -45,66 +45,67 @@ public class Scoreboard extends JFrame{
 		}
 	}
 	
-	private void createLabels(){
+	private void createLabels(){ //adds labels with information from scoreboard
 		for (int i = 0; i < 5; i++){
-			boardinfo[i] = new JLabel(names[i]);
-			boardinfo[i+5] = new JLabel(scores[i]);
-			board.add(boardinfo[i]);
-			board.add(boardinfo[i+5]);
+			boardinfo[i] = new JLabel(names[i]); //names are the first 5 items in the array
+			boardinfo[i+5] = new JLabel(scores[i]); //scores are the last 5 items
+			board.add(boardinfo[i]); //adds a name
+			board.add(boardinfo[i+5]); //then adds its corresponding score
 		}
 
 	}
 	
-	private void refreshLabels(){
+	private void refreshLabels(){ //rewrites labels in boardinfo to names and scores saved in the arrays
 		for (int i = 0; i < 5; i++){
 			boardinfo[i].setText(names[i]);
 			boardinfo[i+5].setText(scores[i]);
 		}
 	}
 	
+	public void setHighscore(){
+		if(scorePosition<4){ //if the user's position isn't last on the scoreboard
+			for (int i = scorePosition;i<4;i++){
+				scores[i+1] = scores[i]; //move scores down by 1 position
+				names[i+1] = names[i]; //move names down by 1 position
+			}
+		}
+		scores[scorePosition] = Integer.toString(userscore); //user's score is written to array of scores in position scorePosition
+		names[scorePosition] = username; //user's name is also stored in names array at scorePosition
+		UpdateFile(); //score file is updated
+		refreshLabels(); //labels are rewritten
+	}
+	
 	private void createBoard(){
-		readers();
-		board.setLayout(new GridLayout(6,2,0,0));
-		createLabels();
-		JTextArea name = new JTextArea();
-		JButton addScore = new JButton("Add score");
-		addScore.addActionListener(new ActionListener(){
+		readers(); //calls readers to get info from file
+		board.setLayout(new GridLayout(6,2,0,0)); //layout of scoreboard is 6 rows and 2 columns
+		createLabels(); //calls createLabels 
+		JTextArea name = new JTextArea();//creates area for user to input name
+		JButton addScore = new JButton("Add score");//creates button for user to submit name and score
+		addScore.addActionListener(new ActionListener(){ //adds event for when button is clicked
 			@Override
 			public void actionPerformed(ActionEvent e) {
-					if (!submitted && name.getText()!=""){
-						username = name.getText();
-						for (int i=0; i<5;i++){
-							if (userscore < Integer.parseInt(scores[i]) || (names[i] == "NONE")){
-								scorePosition = i;
+					if (!submitted && name.getText()!=""){ //if user hasn't submitted yet and the text field isn't blank
+						username = name.getText(); //user's typed name is stored into username
+						for (int i=0; i<5;i++){ //for each score in the scoreboard
+							if (userscore < Integer.parseInt(scores[i]) || (names[i] == "NONE")){ //if the users score is less than the score at i or the name is NONE i.e. undefined
+								scorePosition = i; //user will take the position at i
 								break;
 							}
 						}
-						setHighscore();
-						submitted = true;
+						setHighscore(); //calls setHighscore
+						submitted = true; //says the user can no longer submit a score
 					}
 					
 				}
 			});
-		board.add(addScore);
-		board.add(name);
+		board.add(addScore);//adds submit button to panel
+		board.add(name); //adds text box to panel
 	}
 	
-	public void setHighscore(){
-		if(scorePosition<4){
-			for (int i = scorePosition;i<4;i++){
-				scores[i+1] = scores[i];
-				names[i+1] = names[i];
-			}
-		}
-		scores[scorePosition] = Integer.toString(userscore);
-		names[scorePosition] = username;
-		UpdateFile();
-		refreshLabels();
-		submitted=true;
-	}
+
 	
 	public boolean getSubmitted(){
-		return submitted;
+		return submitted; //
 	}
 
 	public Scoreboard(int x){
@@ -112,7 +113,7 @@ public class Scoreboard extends JFrame{
 		userscore = x;
 		setSize(400,400);
 		setResizable(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);	
+		setDefaultCloseOperation(EXIT_ON_CLOSE); //if window is closed code stops running
 		createBoard();
 		add(board);
 		setVisible(true);
