@@ -143,7 +143,7 @@ public class UI extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);	
 		createButtons();
 		addButtons();
-		randomize();
+//		randomize();
 		add(p);
 		setVisible(true);
 	}
