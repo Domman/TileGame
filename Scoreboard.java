@@ -4,41 +4,44 @@ import java.awt.event.*;
 import java.io.*;
 
 public class Scoreboard extends JFrame{
-	JPanel board = new JPanel();
-	private boolean submitted = false;
-	FileReader highscores;
+	JPanel board = new JPanel(); 
+	private boolean submitted = false; //has user submitted score
+	FileReader highscores; 
 	BufferedReader br;
-	String[] names = new String[5];
-	String[] scores = new String[5];
-	JLabel[] boardinfo = new JLabel[10];	
-	int currentscore = 0;
-	private String username;
-	private int userscore;
 	
-	public void readers(){
+	String[] names = new String[5]; //names of highscore table
+	String[] scores = new String[5];//scores of highscore table
+	JLabel[] boardinfo = new JLabel[10]; //stores both names and scores
+	
+	int scorePosition = 0; //position on scoreboard if user's score is eligible
+	private String username; //name to be submitted to scores
+	private int userscore; //score to be submitted to scores
+	
+	public void readers(){ //reads from the scores file
 		try{
-		FileReader highscores = new FileReader("scores.txt");
+		FileReader highscores = new FileReader("scores.txt"); 
 		BufferedReader br = new BufferedReader(highscores);
 		for (int i = 0; i < 5; i++){
-		names[i] = br.readLine();
-		scores[i] = br.readLine();
+		names[i] = br.readLine(); //name is read into names array
+		scores[i] = br.readLine();//score is read into score array
 		}
-		br.close();
+		br.close(); //close connection
 		} catch (IOException e){
+		System.out.println("Error reading data from file");
 		}
 	}
 	
-	public void UpdateFile(){
+	public void UpdateFile(){ //writes to scores file
 		try{
-			FileWriter highscores = new FileWriter("scores.txt", false);
+			FileWriter highscores = new FileWriter("scores.txt", false); //false allows rewriting of file
 			BufferedWriter bw = new BufferedWriter(highscores);
 			for (int i =0; i < 5; i++){
-				bw.write(names[i] + "\n");
-				bw.write(scores[i] + "\n");
+				bw.write(names[i] + "\n"); //name is copied from array to file
+				bw.write(scores[i] + "\n"); //score copied from array to file
 			}
-			bw.close();
+			bw.close(); //close connection
 		} catch (IOException e){
-		
+		System.out.println("Error copying data to file");
 		}
 	}
 	
@@ -72,7 +75,7 @@ public class Scoreboard extends JFrame{
 						username = name.getText();
 						for (int i=0; i<5;i++){
 							if (userscore < Integer.parseInt(scores[i]) || (names[i] == "NONE")){
-								currentscore = i;
+								scorePosition = i;
 								break;
 							}
 						}
@@ -87,13 +90,14 @@ public class Scoreboard extends JFrame{
 	}
 	
 	public void setHighscore(){
-		if(currentscore<4){
-			for (int i = currentscore;i<4;i++){
+		if(scorePosition<4){
+			for (int i = scorePosition;i<4;i++){
 				scores[i+1] = scores[i];
+				names[i+1] = names[i];
 			}
 		}
-		scores[currentscore] = Integer.toString(userscore);
-		names[currentscore] = username;
+		scores[scorePosition] = Integer.toString(userscore);
+		names[scorePosition] = username;
 		UpdateFile();
 		refreshLabels();
 		submitted=true;
