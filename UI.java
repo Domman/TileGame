@@ -5,16 +5,19 @@ import java.util.Random;
 
 public class UI extends JFrame{
 	JPanel p = new JPanel();
-	JButton b = new JButton();
+	JButton b = new JButton();	
+	private int score = 0; //user's score
 	JButton[][] OrderedB = new JButton[3][4]; //how the game appears to the user
 	JButton[][] OriginalB = new JButton[3][4]; //what the game should look like
-	JLabel currentScore = new JLabel("Score: 0"); //displays current score
+	JLabel currentScore = new JLabel("Score: " + score); //displays current score
 	GridBagConstraints gbc = new GridBagConstraints();//layout of game
 	private int bx = 0; //used to determine where buttons will be placed
 	private int by = 0; // same as bx
+	private boolean hasclicked = false;
+	private boolean clicked = false;
 	private int bartNum = 0;//used to create name of bart image file
 	ImageIcon blank = new ImageIcon("bart0.jpg");
-	private int score = 2; //user's score
+
 	private boolean gameOver = false; //false = game is still going, true = game has been won
 	
 	private void createButtons(){
@@ -36,6 +39,7 @@ public class UI extends JFrame{
 				OrderedB[i][j].setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.black));//button border set to black
 				OriginalB[i][j] = OrderedB[i][j]; //how the game should look when complete is stored into OriginalB to be compared
 				p.remove(OriginalB[i][j]);
+
 				OrderedB[i][j].addActionListener(new ActionListener(){ //what the button should do when clicked
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -63,6 +67,8 @@ public class UI extends JFrame{
 								OrderedB[Bui][Buj].setIcon(blank);//sets icon of button clicked to blank								
 								score++;//score increments
 								currentScore.setText("Score: " + score); //update score
+								hasclicked = true;
+								checkClicked();
 							}
 						}
 					}
@@ -73,6 +79,16 @@ public class UI extends JFrame{
 		}
 	}
 	
+	public void checkClicked(){
+		if (hasclicked == true){
+			clicked = true;
+		}
+	}
+
+	public boolean getClicked(){
+		return clicked;
+	}
+
 	private void addButtons(){
 		for (int i = 0; i < 3; i++)
 		{
@@ -143,7 +159,6 @@ public class UI extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);	
 		createButtons();
 		addButtons();
-//		randomize();
 		add(p);
 		setVisible(true);
 	}

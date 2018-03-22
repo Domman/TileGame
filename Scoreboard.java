@@ -52,7 +52,6 @@ public class Scoreboard extends JFrame{
 			board.add(boardinfo[i]); //adds a name
 			board.add(boardinfo[i+5]); //then adds its corresponding score
 		}
-
 	}
 	
 	private void refreshLabels(){ //rewrites labels in boardinfo to names and scores saved in the arrays
