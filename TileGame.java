@@ -10,10 +10,9 @@ class TileGame{
 			}
 			catch(InterruptedException e){
 			}
+			game.checkWin();
 		}
 		Scoreboard x = new Scoreboard(game.getScore());//creates scoreboard
-		while (!x.getSubmitted()){//while user has not submitted yet
-		}
 
 	}
 }

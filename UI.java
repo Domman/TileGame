@@ -13,8 +13,6 @@ public class UI extends JFrame{
 	GridBagConstraints gbc = new GridBagConstraints();//layout of game
 	private int bx = 0; //used to determine where buttons will be placed
 	private int by = 0; // same as bx
-	private boolean hasclicked = false;
-	private boolean clicked = false;
 	private int bartNum = 0;//used to create name of bart image file
 	ImageIcon blank = new ImageIcon("bart0.jpg");
 
@@ -78,16 +76,6 @@ public class UI extends JFrame{
 			}
 		}
 	}
-	
-	public void checkClicked(){
-		if (hasclicked == true){
-			clicked = true;
-		}
-	}
-
-	public boolean getClicked(){
-		return clicked;
-	}
 
 	private void addButtons(){
 		for (int i = 0; i < 3; i++)
@@ -132,7 +120,7 @@ public class UI extends JFrame{
 			for (int j = 0; j < 4; j++)
 			{
 				if (OriginalB[i][j] != OrderedB[i][j]){ //if current state of game is different from what it should look like
-					
+					gameOver = false;
 				}
 				else{
 					gameOver= true; //if tiles are in correct order gameOver set to true i.e. user has beaten the game
